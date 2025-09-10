@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Cine Online</title>
+  <style>
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #141414;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* =|=|= PANTALLA DE PERFILES =|=|= */
+    #profiles {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #000;
+      text-align: center;
+    }
+
+    #profiles h1 {
+      margin-bottom: 40px;
+      font-size: 2rem;
+    }
+
+    .profiles-list {
+      display: flex;
+      gap: 40px;
+    }
+
+    .profile {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .profile img {
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      border: 3px solid transparent;
+      transition: border 0.3s, transform 0.3s;
+    }
+
+    .profile img:hover {
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+
+    .profile p {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    /* =|=|= PÁGINA PRINCIPAL =|=|= */
+    #main {
+      display: none; 
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 40px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    header img {
+      height: 40px;
+      cursor: pointer;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #e50914;
+    }
+
+    
+    .hero {
+      position: relative;
+      height: 90vh;
+      background: url("https://i.ytimg.com/vi/u1zzloXn4-k/maxresdefault.jpg") no-repeat center center/cover;
+      display: flex;
+      align-items: flex-end;
+      padding: 60px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero button {
+      background: #e50914;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .hero button:hover {
+      background: #f40612;
+    }
+
+    /* Carrusel de películas */
+    .row {
+      margin-top: 30px;
+      padding: 0 40px;
+    }
+
+    .row h2 {
+      margin-bottom: 10px;
+    }
+
+    .row-posters {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding-bottom: 15px;
+    }
+
+    .row-posters img {
+      max-height: 160px;
+      border-radius: 4px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .row-posters img:hover {
+      transform: scale(1.1);
+    }
+
+    .row-posters::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de perfiles -->
+  <div id="profiles">
+    <h1>¿Quién está viendo?</h1>
+    <div class="profiles-list">
+      <div class="profile" onclick="enterApp('Ismael')">
+        <img src="https://images.paramount.tech/uri/mgid:arc:imageassetref:shared.southpark.latam:e98cccce-7e88-4969-b40c-a19085bcb43e?quality=0.7&gen=ntrn" alt="Perfil 1">
+        <p>Ismael</p>
+      </div>
+      <div class="profile" onclick="enterApp('Persona con sindrome de down')">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpKpBSr99RhbUp84m0Ff315wEnde1PfathGA&s" alt="Perfil 2">
+        <p>Persona con sindrome de down</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Página principal -->
+  <div id="main">
+    <!-- Navbar -->
+    <header>
+      <a href="https://tu-link-del-logo.com">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Logo">
+      </a>
+      <nav>
+        <a href="#">Inicio</a>
+        <a href="#">Películas</a>
+        <a href="#">Series</a>
+        <a href="#">Perfiles</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div>
+        <h1>Pelicula Destacada</h1>
+        <button onclick="location.href='https://www.youtube.com/watch?v=bd7PTHImmaI&ab_channel=ProduccionesDocumentalesCu%C3%A9ntameUna'" target="_blank">Ver ahora</button>
+      </div>
+    </div>
+
+    <!-- Carrusel Populares -->
+    <div class="row">
+      <h2>Populares</h2>
+      <div class="row-posters">
+        <a href="https://www.youtube.com/watch?v=QskN9E6mCFk&ab_channel=NetMovies-Pel%C3%ADculasEnEspa%C3%B1ol" target="_blank">
+          <img src="https://pics.filmaffinity.com/La_novena_puerta-541381028-large.jpg" alt="La novena puerta">
+        </a>
+        <a href="https://www.youtube.com/watch?v=NDm0hmqgGgE&ab_channel=LaCintaProhibida" target="_blank">
+          <img src="https://m.media-amazon.com/images/M/MV5BOTNhMjU4ODUtZDIzZS00OWE3LWFiZmMtYWFkNjdhN2ZhYzhhXkEyXkFqcGc@._V1_.jpg" alt="The corrupted">
+        </a>
+        <a href="https://www.youtube.com/watch?v=WWwOCf4Ct0g&ab_channel=CineExplorador" target="_blank">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp0ZYOGlWJrVEuKkuB3DR5PiPixLae25stkA&s" alt="crusade in jeans">
+        </a>
+        <a href="https://www.youtube.com/watch?v=R5KMSgDW1mc&ab_channel=EnzoMaidana"_blank">
+          <img src="https://m.media-amazon.com/images/M/MV5BMDJmYWI5NDctZjM5Zi00NzJiLTk4YTEtZjFhYTZhMTJiYWEzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Grounups">
+        </a>
+      </div>
+    </div>
+
+    <!-- Carrusel Recomendadas -->
+    <div class="row">
+      <h2>Recomendadas</h2>
+      <div class="row-posters">
+        <a href="https://www.youtube.com/watch?v=83qVkj9vVgg&ab_channel=DISFRUTEDELCINE" target="_blank">
+          <img src="https://m.media-amazon.com/images/M/MV5BMTUwNTk0ODExNl5BMl5BanBnXkFtZTcwOTc0MzI4Mg@@._V1_FMjpg_UX1000_.jpg" alt="the wrath of cain">
+        </a>
+        <a href="https://www.youtube.com/watch?v=syIbvylKDr0&ab_channel=SwenFilms-Pel%C3%ADculasEnEspa%C3%B1ol" target="_blank">
+          <img src="https://m.media-amazon.com/images/M/MV5BMTQ5NzA1Mzg1Nl5BMl5BanBnXkFtZTcwMDg3ODEzMQ@@._V1_.jpg" alt="Ghost rider">
+        </a>
+        <a href="https://www.youtube.com/watch?v=V6He7vEo0us&ab_channel=nuevaspeliculas" target="_blank">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpP9jkxNa5r3lUUjYEmNRN3fC3qQWm0zAT6g&s" alt="ANGELS VS. ZOMBIES">
+        </a>
+        <a href="https://www.youtube.com/watch?v=Jx_-zL0d5Qo&ab_channel=Cineonplus" target="_blank">
+          <img src="https://images.justwatch.com/poster/158684987/s718/the-challenger.jpg" alt="The challenger">
+        </a>
+      </div>
+    </div>
+  </div>
+/* =|=|	coge el javascript rafa=|=|= */
+  <script>
+    function enterApp(profileName) {
+      document.getElementById("profiles").style.display = "none";
+      document.getElementById("main").style.display = "block";
+      console.log("Entró el perfil:", profileName);
+    }
+  </script>
+
+</body>
+</html>
