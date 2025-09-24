@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Cine Online</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #141414; color: #fff; font-family: Arial, Helvetica, sans-serif; }
+
+    /* === PANTALLA DE PERFILES === */
+    #profiles {
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      height: 100vh; background: #000; text-align: center;
+    }
+    #profiles h1 { margin-bottom: 40px; font-size: 2rem; }
+    .profiles-list { display: flex; gap: 40px; flex-wrap: wrap; }
+    .profile { text-align: center; cursor: pointer; }
+    .profile img {
+      width: 120px; height: 120px; border-radius: 8px; border: 3px solid transparent;
+      transition: border 0.3s, transform 0.3s; object-fit: cover;
+    }
+    .profile img:hover { border: 3px solid #fff; transform: scale(1.1); }
+    .profile p { margin-top: 10px; font-size: 14px; }
+
+    /* Botón "+" */
+    .add-profile {
+      width: 120px; height: 120px; border-radius: 8px; border: 2px dashed #aaa;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 50px; color: #aaa; transition: transform 0.3s, color 0.3s;
+    }
+    .add-profile:hover { color: #fff; transform: scale(1.1); border-color: #fff; }
+
+    /* === FORMULARIO MODAL PERFIL === */
+    #addProfileForm {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); justify-content: center; align-items: center;
+      z-index: 100;
+    }
+    #addProfileForm form {
+      background: #222; padding: 20px; border-radius: 8px; width: 300px; text-align: center;
+    }
+    #addProfileForm input {
+      width: 90%; padding: 8px; margin: 10px 0; border-radius: 4px; border: none;
+    }
+    #addProfileForm button { padding: 10px 15px; border: none; margin: 5px; cursor: pointer; }
+    .btn-save { background: #e50914; color: white; border-radius: 4px; }
+    .btn-cancel { background: #555; color: white; border-radius: 4px; }
+
+    /* === PÁGINA PRINCIPAL === */
+    #main { display: none; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 15px 40px; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+      position: fixed; top: 0; width: 100%; z-index: 10;
+    }
+    header img { height: 40px; cursor: pointer; }
+    nav a { color: #fff; text-decoration: none; margin: 0 15px; font-size: 14px; }
+    nav a:hover { color: #e50914; }
+
+    .hero {
+      position: relative; height: 90vh;
+      background: url("https://i.ytimg.com/vi/u1zzloXn4-k/maxresdefault.jpg") no-repeat center center/cover;
+      display: flex; align-items: flex-end; padding: 60px;
+    }
+    .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+    .hero button {
+      background: #e50914; color: #fff; border: none; padding: 12px 24px;
+      font-size: 16px; border-radius: 5px; cursor: pointer;
+    }
+    .hero button:hover { background: #f40612; }
+
+    /* Carrusel */
+    .row { margin-top: 30px; padding: 0 40px; }
+    .row h2 { margin-bottom: 10px; }
+    .row-posters { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; }
+    .row-posters img {
+      max-height: 160px; border-radius: 4px; transition: transform 0.3s; cursor: pointer;
+    }
+    .row-posters img:hover { transform: scale(1.1); }
+    .row-posters::-webkit-scrollbar { display: none; }
+
+    /* === MODAL DETALLE PELÍCULA === */
+    #movieModal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 200;
+    }
+    #movieModal .content {
+      background: #222; padding: 20px; border-radius: 8px; width: 400px; text-align: center;
+    }
+    #movieModal img { max-width: 100%; border-radius: 6px; margin-bottom: 10px; }
+    #movieModal button {
+      margin: 10px; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;
+    }
+    .btn-watch { background: #e50914; color: #fff; }
+    .btn-close { background: #555; color: #fff; }
+  </style>
+</head>
+<body>
+  <!-- Pantalla de perfiles -->
+  <div id="profiles">
+    <h1>¿Quién está viendo?</h1>
+    <div class="profiles-list" id="profileList">
+      <div class="profile" onclick="enterApp('Ismael')">
+        <img src="https://images.paramount.tech/uri/mgid:arc:imageassetref:shared.southpark.latam:e98cccce-7e88-4969-b40c-a19085bcb43e?quality=0.7&gen=ntrn" alt="Perfil 1">
+        <p>Ismael</p>
+      </div>
+      <div class="profile" onclick="enterApp('Cartman')">
+        <img src="https://static01.nyt.com/images/2025/08/18/espanol/18cul-southpark-notebook-hj-ES-copy1/18cul-southpark-notebook-hj-articleLarge.jpg?quality=75&auto=webp&disable=upscale" alt="Perfil 2">
+        <p>Cartman</p>
+      </div>
+      <!-- Botón + -->
+      <div class="profile" onclick="showAddProfile()">
+        <div class="add-profile">+</div>
+        <p>Agregar perfil</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario añadir perfil -->
+  <div id="addProfileForm">
+    <form onsubmit="addProfile(event)">
+      <h2>Nuevo perfil</h2>
+      <input type="text" id="profileName" placeholder="Nombre" required>
+      <input type="text" id="profileImg" placeholder="URL del avatar" required>
+      <br>
+      <button type="submit" class="btn-save">Guardar</button>
+      <button type="button" class="btn-cancel" onclick="closeAddProfile()">Cancelar</button>
+    </form>
+  </div>
+
+  <!-- Página principal -->
+  <div id="main">
+    <header>
+      <a href="https://tu-link-del-logo.com">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Logo">
+      </a>
+      <nav>
+        <a href="#">Inicio</a><a href="#">Películas</a><a href="#">Series</a><a href="#">Perfiles</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div>
+        <h1>Pelicula Destacada</h1>
+        <button onclick="location.href='https://www.youtube.com/watch?v=bd7PTHImmaI'" target="_blank">Ver ahora</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <h2>Populares</h2>
+      <div class="row-posters">
+        <img src="https://pics.filmaffinity.com/La_novena_puerta-541381028-large.jpg" alt="La novena puerta"
+             onclick="openMovie('La novena puerta','Thriller misterioso con Johnny Depp','https://pics.filmaffinity.com/La_novena_puerta-541381028-large.jpg','https://www.youtube.com/watch?v=QskN9E6mCFk')">
+        <img src="https://m.media-amazon.com/images/M/MV5BOTNhMjU4ODUtZDIzZS00OWE3LWFiZmMtYWFkNjdhN2ZhYzhhXkEyXkFqcGc@._V1_.jpg" alt="The corrupted"
+             onclick="openMovie('The corrupted','Historia de corrupción y redención','https://m.media-amazon.com/images/M/MV5BOTNhMjU4ODUtZDIzZS00OWE3LWFiZmMtYWFkNjdhN2ZhYzhhXkEyXkFqcGc@._V1_.jpg','https://www.youtube.com/watch?v=NDm0hmqgGgE')">
+      </div>
+    </div>
+
+    <div class="row">
+      <h2>Recomendadas</h2>
+      <div class="row-posters">
+        <img src="https://m.media-amazon.com/images/M/MV5BMTQ5NzA1Mzg1Nl5BMl5BanBnXkFtZTcwMDg3ODEzMQ@@._V1_.jpg" alt="Ghost rider"
+             onclick="openMovie('Ghost rider','Un motorista hace un pacto sobrenatural','https://m.media-amazon.com/images/M/MV5BMTQ5NzA1Mzg1Nl5BMl5BanBnXkFtZTcwMDg3ODEzMQ@@._V1_.jpg','https://www.youtube.com/watch?v=syIbvylKDr0')">
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal detalle película -->
+  <div id="movieModal">
+    <div class="content">
+      <img id="movieImage" src="" alt="Poster">
+      <h2 id="movieTitle"></h2>
+      <p id="movieDesc"></p>
+      <button class="btn-watch" id="watchNow">Ver ahora</button>
+      <button class="btn-close" onclick="closeMovie()">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    function enterApp(profileName) {
+      document.getElementById("profiles").style.display = "none";
+      document.getElementById("main").style.display = "block";
+    }
+    function showAddProfile() { document.getElementById("addProfileForm").style.display = "flex"; }
+    function closeAddProfile() { document.getElementById("addProfileForm").style.display = "none"; }
+
+    function addProfile(event) {
+      event.preventDefault();
+      const name = document.getElementById("profileName").value;
+      const img = document.getElementById("profileImg").value;
+      if (!name || !img) return;
+      const newProfile = document.createElement("div");
+      newProfile.className = "profile";
+      newProfile.innerHTML = `<img src="${img}" alt="${name}"><p>${name}</p>`;
+      newProfile.onclick = () => enterApp(name);
+      document.getElementById("profileList").insertBefore(newProfile, document.querySelector(".add-profile").parentElement);
+      closeAddProfile();
+    }
+
+    function openMovie(title, desc, img, url) {
+      document.getElementById("movieTitle").innerText = title;
+      document.getElementById("movieDesc").innerText = desc;
+      document.getElementById("movieImage").src = img;
+      document.getElementById("watchNow").onclick = () => window.open(url, "_blank");
+      document.getElementById("movieModal").style.display = "flex";
+    }
+    function closeMovie() { document.getElementById("movieModal").style.display = "none"; }
+  </script>
+</body>
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 Piratitas del caribe chabaleee. Todos los derechos reservados.</p>
+      <p>
+        <a href="#">Aviso Legal</a> | 
+        <a href="#">Privacidad</a> | 
+        <a href="#">Contacto</a>
+      </p>
+    </div>
+  </footer>
+
+  <style>
+    footer {
+      background: #111;
+      color: #777;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 40px;
+    }
+    footer a {
+      color: #777;
+      text-decoration: none;
+      margin: 0 8px;
+      font-size: 14px;
+    }
+    footer a:hover {
+      color: #fff;
+    }
+    .footer-content p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+  </style>
+
+</html>
